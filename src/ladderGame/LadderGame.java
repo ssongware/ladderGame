@@ -1,6 +1,5 @@
 package ladderGame;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -96,41 +95,48 @@ public class LadderGame {
 	}
 	
 	private void showPath(Position current, Ladder ladder) {
-		int currentRow = current.getRow();
-		int currentColumn = current.getColumn();
-		
-		System.out.println("----------------------------------");
-		for(int i = 0 ; i < ladder.size(); i++) {
-			String str = rowToString(ladder.get(i));
-			
-			if(i == currentRow) {
-				str = currentRowToString(ladder.get(i), currentColumn);
-			}
-			
-			System.out.println(str);
-		}
-		System.out.println("----------------------------------");
-	}
-	
-	private String rowToString(int[] column) {
-		String str = "";
-		for (int i : column) {
-			str += i + "\t";
-		}
-		
-		return str;
-	}
-	
-	private String currentRowToString(int[] column, int currentColumn) {
-		String str = "";
-		for (int i = 0; i < column.length; i++) {
-			if (i == currentColumn) {
-				str += column[i] + "*\t";
-			}else {
-				str += column[i] + "\t";
-			}
-		}
-		
-		return str;
-	}
+        int currentRow = current.getRow();
+        int currentColumn = current.getColumn();
+
+        System.out.println("----------------------------------");
+        for (int i = 0; i < ladder.size(); i++) {
+            String str = currentRowToString(i, currentRow, ladder.get(i),
+                    currentColumn);
+            System.out.println(str);
+        }
+        System.out.println("----------------------------------");
+    }
+
+    private String currentRowToString(int i, int currentRow, int[] column,
+            int currentColumn) {
+
+        if (i != currentRow) {
+            return rowToString(column);
+        }
+
+        String str = "";
+        for (int j = 0; j < column.length; j++) {
+            str += column[j];
+            str += markCurrentColumn(j, currentColumn);
+        }
+
+        return str;
+    }
+    
+    private String rowToString(int[] column) {
+    	String str = "";
+    	for (int i : column) {
+    		str += i + "\t";
+    	}
+    	
+    	return str;
+    }
+
+    private String markCurrentColumn(int i, int currentColumn) {
+        String str = "";
+        if (i == currentColumn) {
+            str += "*";
+        }
+        return str += "/t";
+    }
 }
