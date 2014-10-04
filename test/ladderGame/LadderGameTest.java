@@ -29,12 +29,12 @@ public class LadderGameTest {
 	@Test
 	public void makeRandomColumnTest() throws Exception {
 		int player = 6;
-		assertThat(lg.makeColumn(player).length, is(6));
+		assertThat(lg.makeRow(player).length, is(6));
 	}
 	
 	@Test
 	public void isValidColumnTest() throws Exception {
 		int player = 6;
-		assertThat(lg.isValidColumn(lg.makeColumn(player)), is(true));
+		assertThat(lg.isValidColumn(lg.makeRow(player)), is(true));
 	}
 }

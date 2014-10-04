@@ -1,6 +1,6 @@
 package ladderGame;
 
-import java.util.Map;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class LadderGame {
 		System.out.println("------ Ladder Game Start!! ------");
 		System.out.print("How many players? ");
 		int player = sc.nextInt();
-		Map<Integer, int[]> ladder = makeLadder(player);
+		Ladder ladder = makeLadder(player);
 		
 		while (true) {
 			System.out.print("Choose your number : ");
@@ -32,18 +32,19 @@ public class LadderGame {
 		Ladder ladder = new Ladder();
 		
 		for (int i = 0 ; i < DEFAULT_ROW; i++) {
-			int[] randomColumn = makeColumn(player);
+			int[] randomColumn = makeRow(player);
 			ladder.put(i, randomColumn);
 		}
 		
 		return ladder;
 	}
 
-	public int find(Map<Integer, int[]> ladder, int input){
+	public int find(Ladder ladder, int input){
 		Position current = new Position();
 		current.init(input);
 		
 		for (int i = 0; i < ladder.size(); i++) {
+			showPath(current, ladder);
 			current = moveToDirection(current, ladder.get(i));
 		}
 		
@@ -63,7 +64,7 @@ public class LadderGame {
 		return current;
 	}
 
-	public int[] makeColumn(int player) {
+	public int[] makeRow(int player) {
 		Random rand = new Random();
 		int[] column = new int[player];
 		
@@ -92,5 +93,44 @@ public class LadderGame {
 		}
 		
 		return false;
+	}
+	
+	private void showPath(Position current, Ladder ladder) {
+		int currentRow = current.getRow();
+		int currentColumn = current.getColumn();
+		
+		System.out.println("----------------------------------");
+		for(int i = 0 ; i < ladder.size(); i++) {
+			String str = rowToString(ladder.get(i));
+			
+			if(i == currentRow) {
+				str = currentRowToString(ladder.get(i), currentColumn);
+			}
+			
+			System.out.println(str);
+		}
+		System.out.println("----------------------------------");
+	}
+	
+	private String rowToString(int[] column) {
+		String str = "";
+		for (int i : column) {
+			str += i + "\t";
+		}
+		
+		return str;
+	}
+	
+	private String currentRowToString(int[] column, int currentColumn) {
+		String str = "";
+		for (int i = 0; i < column.length; i++) {
+			if (i == currentColumn) {
+				str += column[i] + "*\t";
+			}else {
+				str += column[i] + "\t";
+			}
+		}
+		
+		return str;
 	}
 }
