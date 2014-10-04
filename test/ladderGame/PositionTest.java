@@ -2,30 +2,31 @@ package ladderGame;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert .*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class PositionTest {
 
+	Position position = null;
+	
+	@Before
+	public void setup() {
+		position = new Position();
+	}
+	
 	@Test
-	public void test() {
-		Position current = new Position();
+	public void moveToNextRowtest() {
+		position.init(0);
+		assertThat(position.getRow(), is(0));
 		
-		current.init(0);
-		
-		assertThat(current.getRow(), is(0));
-		
-		current.moveToNextRow();
-		
-		assertThat(current.getRow(), is(1));
+		position.moveToNextRow();
+		assertThat(position.getRow(), is(1));
 	}
 	
 	@Test
 	public void initTest() throws Exception {
-		Position position = new Position();
 		position.init(4);
-		
 		assertThat(position.getRow(), is(0));
 		assertThat(position.getColumn(), is(4));
 	}

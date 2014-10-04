@@ -2,22 +2,39 @@ package ladderGame;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.Assert .*;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class LadderGameTest {
-
-	@Test
-	public void findTest() {
-		LadderGame lg = new LadderGame();
-
-		assertThat(lg.find(lg.makeLadder(), 0), is(2));
-		assertThat(lg.find(lg.makeLadder(), 1), is(3));
-		assertThat(lg.find(lg.makeLadder(), 2), is(1));
-		assertThat(lg.find(lg.makeLadder(), 3), is(4));
-		assertThat(lg.find(lg.makeLadder(), 4), is(0));
+	
+	LadderGame lg = null;
+	
+	@Before
+	public void setup() {
+		lg = new LadderGame();
 	}
-
+	
+	@Test
+	public void makeLadderTest() throws Exception {
+		int player = 6;
+		Ladder ladder = lg.makeLadder(player);
+		
+		assertThat(ladder.size(), is(10));
+		for (int i = 0; i < ladder.size(); i++) {
+			assertThat(ladder.get(i).length, is(6));
+		}
+	}
+	
+	@Test
+	public void makeRandomColumnTest() throws Exception {
+		int player = 6;
+		assertThat(lg.makeColumn(player).length, is(6));
+	}
+	
+	@Test
+	public void isValidColumnTest() throws Exception {
+		int player = 6;
+		assertThat(lg.isValidColumn(lg.makeColumn(player)), is(true));
+	}
 }

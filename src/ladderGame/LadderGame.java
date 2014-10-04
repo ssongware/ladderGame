@@ -1,46 +1,40 @@
 package ladderGame;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.Scanner;
 
 public class LadderGame {
 	private static final int RIGHT = 1;
 	private static final int LEFT = -1;
+	private static final int DEFAULT_ROW = 10;
+	private static final int RANDOM_NUMERATOR = 1;
+	private static final int RANDOM_DENOMINATOR = 3;
 	
 	public void run(){
-		Map<Integer, int[]> ladder = makeLadder();
-		int input = 0;
-		int result;
-		result = find(ladder, input);
+		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("결과는 "+result+"입니다!");
+		System.out.println("------ Ladder Game Start!! ------");
+		System.out.print("How many players? ");
+		int player = sc.nextInt();
+		Map<Integer, int[]> ladder = makeLadder(player);
+		
+		while (true) {
+			System.out.print("Choose your number : ");
+			int input = sc.nextInt();
+			int result = find(ladder, input - 1);
+			
+			System.out.println("Result is " + (result + 1) + "!\n");
+		}
 	}
 	
-	public Map<Integer, int[]> makeLadder(){
-		//Ladder ladder = new Ladder();
-		Map<Integer, int[]> ladder = new HashMap<Integer, int[]>();
-
-		int[] column0 = {0,0,0,0,0};
-		int[] column1 = {RIGHT,LEFT,0,RIGHT,LEFT};
-		int[] column2 = {0,RIGHT,LEFT,0,0};
-		int[] column3 = {0,0,0,0,0};
-		int[] column4 = {RIGHT,LEFT,RIGHT,LEFT,0};
-		int[] column5 = {0,0,0,0,0};
-		int[] column6 = {0,0,0,RIGHT,LEFT};
-		int[] column7 = {0,RIGHT,LEFT,0,0};
-		int[] column8 = {RIGHT,LEFT,0,RIGHT,LEFT};
-		int[] column9 = {0,0,RIGHT,LEFT,0};
+	public Ladder makeLadder(int player){
+		Ladder ladder = new Ladder();
 		
-		ladder.put(0,column0);
-		ladder.put(1,column1);
-		ladder.put(2,column2);
-		ladder.put(3,column3);
-		ladder.put(4,column4);
-		ladder.put(5,column5);
-		ladder.put(6,column6);
-		ladder.put(7,column7);
-		ladder.put(8,column8);
-		ladder.put(9,column9);
+		for (int i = 0 ; i < DEFAULT_ROW; i++) {
+			int[] randomColumn = makeColumn(player);
+			ladder.put(i, randomColumn);
+		}
 		
 		return ladder;
 	}
@@ -67,5 +61,36 @@ public class LadderGame {
 		current.moveToNextRow();
 		
 		return current;
+	}
+
+	public int[] makeColumn(int player) {
+		Random rand = new Random();
+		int[] column = new int[player];
+		
+		for (int i = 0; i < (column.length-1); i++) {
+			if (rand.nextInt(RANDOM_DENOMINATOR) < RANDOM_NUMERATOR) {
+				column[i] = RIGHT;
+				column[++i] = LEFT;
+			}
+		}
+		
+		if (!isValidColumn(column)) {
+			throw new RuntimeException("잘못된 라인 생성");
+		}
+		
+		return column;
+	}
+
+	public boolean isValidColumn(int[] randomColumn) {
+		int valid = 0;
+		for (int i = 0; i < randomColumn.length; i++) {
+			valid += randomColumn[i];
+		}
+		
+		if (valid == 0) {
+			return true;
+		}
+		
+		return false;
 	}
 }
